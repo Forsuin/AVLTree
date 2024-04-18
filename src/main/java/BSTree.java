@@ -8,5 +8,9 @@ public sealed interface BSTree<T extends Comparable<T>> permits EmptyTree, Node 
     default BSTree<T> delete( /* BSTree this, */ T target ) { return this.delete(target, false); }
     BSTree<T> delete( T target, boolean targetNeedNotOccur  );
 
-    public Optional<BSTree<T>> min();
+    Optional<BSTree<T>> min();
+
+    int height();
+
+    boolean isValid();
 }

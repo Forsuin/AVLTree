@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BSTreeTest {
 
@@ -84,7 +84,78 @@ public class BSTreeTest {
                         .min());
 
         assertEquals(Optional.empty(), mt.min());
+    }
 
+    @Test
+    void testValid() {
+        EmptyTree mt = EmptyTree.getInstance();
+
+        Node<Integer> t1 = new Node<>(27);
+        assertTrue(t1.isValid());
+
+        Node<Integer> t3 = new Node<>(27, new Node<>(11), new Node<>(83));
+        assertTrue(t3.isValid());
+
+        assertFalse(new Node<>(27,
+                new Node<Integer>(83, mt, new Node<Integer>(20, new Node<>(18), mt)),
+                new Node<>(11))
+                .isValid());
+
+        assertTrue(new Node<>(27,
+                new Node<Integer>(11, mt, new Node<Integer>(20, new Node<>(18), mt)),
+                new Node<>(83))
+                .isValid());
+
+        assertTrue(new Node<>(27,
+                new Node<>(11, new Node<>(5), new Node<Integer>(20, new Node<>(18), mt)),
+                new Node<>(83))
+                .isValid());
+
+        assertFalse(new Node<>(27,
+                new Node<>(11, new Node<>(50), new Node<Integer>(20, new Node<>(18), mt)),
+                new Node<>(83))
+                .isValid());
+
+        assertTrue(new Node<>(27,
+                new Node<>(11, new Node<Integer>(5, new Node<>(1, mt, new Node<>(3)), mt), new Node<Integer>(20, new Node<>(18), mt)),
+                new Node<>(83))
+                .isValid());
+
+        assertTrue(mt.isValid());
+    }
+
+    @Test
+    void testRotateLeft() {
+        EmptyTree mt = EmptyTree.getInstance();
+
+        assertEquals(new Node<>(20, new Node<>(30), new Node<>(10)),
+                new Node<Integer>(30, mt, new Node<Integer>(20, mt, new Node<>(10))).rotateLeft()
+        );
+
+        assertEquals(new Node<>(20, new Node<>(30), new Node<>(10, mt, new Node<>(5))),
+                new Node<>(30, mt, new Node<>(20, mt,  new Node<>(10, mt, new Node<>(5)))).rotateLeft()
+        );
+
+        assertEquals(new Node<>(30, new Node<>(20), new Node<>(50, new Node<>(40), new Node<>(60))),
+                new Node<>(30, new Node<>(20), new Node<>(40, mt, new Node<>(50, mt, new Node<>(60))).rotateLeft())
+        );
+    }
+
+    @Test
+    void testRotateRight() {
+        EmptyTree mt = EmptyTree.getInstance();
+
+        assertEquals(new Node<>(20, new Node<>(10), new Node<>(30)),
+                new Node<>(30, new Node<>(20, new Node<>(10), mt), mt).rotateRight()
+        );
+
+        assertEquals(new Node<>(20, new Node<>(10, new Node<>(5), mt), new Node<>(30)),
+                new Node<>(30, new Node<>(20, new Node<>(10, new Node<>(5), mt), mt), mt).rotateRight()
+        );
+
+        assertEquals(new Node<>(30, new Node<>(10, new Node<>(5), new Node<>(20)), new Node<>(40)),
+                new Node<>(30, new Node<>(20, new Node<>(10, new Node<>(5), mt), mt).rotateRight(), new Node<>(40))
+        );
     }
 
     @Test
@@ -303,9 +374,9 @@ removing  27 might give:
 
         // Optional: Printing out some trees.
         // We won't enforce (unit-test) an exact format of `toString` though.
-        System.out.println("An empty tree: " + EmptyTree.getInstance().toString());
-        System.out.println("A singleton tree: " + new Node(47, mt, mt));
-        System.out.println("A slightly bigger tree: " + x);
+//        System.out.println("An empty tree: " + EmptyTree.getInstance().toString());
+//        System.out.println("A singleton tree: " + new Node(47, mt, mt));
+//        System.out.println("A slightly bigger tree: " + x);
     }
 }
 

@@ -28,4 +28,16 @@ record EmptyTree<T extends Comparable<T>>() implements BSTree<T> {
     public Optional<BSTree<T>> min() {
         return Optional.empty();
     }
+
+    @Override
+    public int height() {
+        return 0;
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+
 }
