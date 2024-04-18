@@ -13,4 +13,6 @@ public sealed interface BSTree<T extends Comparable<T>> permits EmptyTree, Node 
     int height();
 
     boolean isValid();
+
+    BSTree<T> rebalance();
 }

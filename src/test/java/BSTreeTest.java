@@ -35,8 +35,9 @@ public class BSTreeTest {
     void testInsert() {
         EmptyTree mt = EmptyTree.getInstance();
         assertEquals(new Node(27), mt.insert(27));
+
         assertEquals(new Node(27,
-                        new Node(11, mt, new Node(20, new Node(18), mt)),
+                        new Node(18, new Node<>(11), new Node<>(20)),
                         new Node(83)),
                 new Node(27,
                         new Node(11, mt, new Node(20)),
@@ -157,6 +158,30 @@ public class BSTreeTest {
                 new Node<>(30, new Node<>(20, new Node<>(10, new Node<>(5), mt), mt).rotateRight(), new Node<>(40))
         );
     }
+
+    @Test
+    void testRebalance() {
+        EmptyTree mt = EmptyTree.getInstance();
+
+        // rebalancing happens on insertion
+        assertEquals(new Node<>(30, new Node<>(20), new Node<>(50, new Node<>(40), new Node<>(60))),
+                new Node<>(30, new Node<>(20), new Node<>(40, mt, new Node<>(50, mt, new Node<>(60))).rebalance())
+        );
+
+        assertEquals(new Node<>(30, new Node<>(10, new Node<>(0), new Node<>(20)), new Node<>(40)),
+                new Node<>(30, new Node<>(20, new Node<>(10, new Node<>(0), mt), mt).rebalance(), new Node<>(40))
+        );
+
+        assertEquals(new Node<>(30, new Node<>(15, new Node<>(10), new Node<>(20)), new Node<>(40)),
+                new Node<>(30, new Node<>(20, new Node<>(10, mt, new Node<>(15)), mt).rebalance(), new Node<>(40))
+        );
+
+        assertEquals(new Node<>(30, new Node<>(20), new Node<>(45, new Node<>(40), new Node<>(50))),
+                new Node<>(30, new Node<>(20), new Node<>(40, mt, new Node<>(50, new Node<>(45), mt)).rebalance())
+                );
+    }
+
+
 
     @Test
     void testDelete() {

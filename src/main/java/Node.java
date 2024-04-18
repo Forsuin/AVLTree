@@ -18,8 +18,8 @@ public record Node<T extends Comparable<T>>(T datum, BSTree<T> l, BSTree<T> r, i
 
     public Node<T> insert( /* Node this, */ T newItem ) {
         return (newItem.compareTo( this.datum ) < 0)
-                ? new Node<T>(  this.datum(),  this.l().insert(newItem),  this.r() )
-                : new Node<T>(  this.datum(),  this.l(),  this.r().insert(newItem) );
+                ? new Node<T>(  this.datum(),  this.l().insert(newItem),  this.r() ).rebalance()
+                : new Node<T>(  this.datum(),  this.l(),  this.r().insert(newItem) ).rebalance();
         // mutating version: this.r = this.r().insert(newItem);
     }
 
@@ -88,6 +88,39 @@ public record Node<T extends Comparable<T>>(T datum, BSTree<T> l, BSTree<T> r, i
             }
             default -> throw new IllegalStateException("Unexpected value, invalid BSTree implementor: " + this);
         };
+    }
+
+    @Override
+    public Node<T> rebalance() {
+        if(this.r.height() - this.l.height() == 2) {
+            // rebalance right
+
+            if(((Node<T>) this.r).r.height() > ((Node<T>) this.r).l.height()) {
+                // single rotation
+                return this.rotateLeft();
+            }
+            else {
+                // double rotation
+                Node<T> newNode = new Node<>(this.datum, this.l, ((Node<T>) this.r).rotateRight());
+                return newNode.rotateLeft();
+            }
+        }
+        else if(this.l.height() - this.r.height() == 2) {
+            // rebalance left
+
+            if(((Node<T>) this.l).l.height() > ((Node<T>) this.l).r.height()) {
+                //single rotation
+
+                return this.rotateRight();
+            }
+            else {
+                Node<T> newNode = new Node<>(this.datum, ((Node<T>) this.l).rotateLeft(), this.r);
+                return newNode.rotateRight();
+            }
+        }
+
+        // nothing needing to be done
+        return this;
     }
 
     public Node<T> rotateLeft() {

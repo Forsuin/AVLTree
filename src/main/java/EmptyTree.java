@@ -39,5 +39,8 @@ record EmptyTree<T extends Comparable<T>>() implements BSTree<T> {
         return true;
     }
 
-
+    @Override
+    public BSTree<T> rebalance() {
+        return EmptyTree.getInstance();
+    }
 }
